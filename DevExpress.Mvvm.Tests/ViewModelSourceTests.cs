@@ -669,19 +669,6 @@ namespace DevExpress.Mvvm.Tests {
                 ProtectedInternalChangedMethodWithoutParamOldValue++;
             }
         }
-        [Test]
-        public void PropertyChangedTest() {
-            POCOViewModel_PropertyChanged viewModel = ViewModelSource.Create<POCOViewModel_PropertyChanged>();
-            ((INotifyPropertyChanged)viewModel).PropertyChanged += (o, e) => Assert.IsFalse(viewModel.OnProtectedChangedMethodWithParamChangedCalled);
-            CheckBindableProperty(viewModel, x => x.ProtectedChangedMethodWithParam, (vm, x) => vm.ProtectedChangedMethodWithParam = x, "x", "y", (x, val) => {
-                Assert.IsTrue(x.OnProtectedChangedMethodWithParamChangedCalled);
-                x.OnProtectedChangedMethodWithParamChangedCalled = false;
-                Assert.AreEqual(val, x.ProtectedChangedMethodWithParamOldValue);
-            });
-
-            CheckBindableProperty(viewModel, x => x.PublicChangedMethodWithoutParam, (vm, x) => vm.PublicChangedMethodWithoutParam = x, 1, 2, (x, val) => Assert.AreEqual(val + 1, x.PublicChangedMethodWithoutParamOldValue));
-            CheckBindableProperty(viewModel, x => x.ProtectedInternalChangedMethodWithoutParam, (vm, x) => vm.ProtectedInternalChangedMethodWithoutParam = x, 1, 2, (x, val) => Assert.AreEqual(val + 1, x.ProtectedInternalChangedMethodWithoutParamOldValue));
-        }
         public class ViewModelWithFunctionCommandMethod {
             [Command]
             public bool Save() {
