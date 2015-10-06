@@ -727,25 +727,6 @@ namespace DevExpress.Mvvm.Tests {
         }
         #endregion
 
-        #region subscribe in constructor
-        public class POCOViewModel_SubscribeInCtor {
-            public POCOViewModel_SubscribeInCtor() {
-                ((INotifyPropertyChanged)this).PropertyChanged += POCOViewModel_SubscribeInCtor_PropertyChanged;
-                Property = "x";
-            }
-            public int propertyChangedCallCount;
-            void POCOViewModel_SubscribeInCtor_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-                propertyChangedCallCount++;
-            }
-            public virtual string Property { get; set; }
-        }
-        [Test]
-        public void POCOViewModel_SubscribeInCtorTest() {
-            POCOViewModel_SubscribeInCtor viewModel = ViewModelSource.Create<POCOViewModel_SubscribeInCtor>();
-            Assert.AreEqual(1, viewModel.propertyChangedCallCount);
-        }
-        #endregion
-
         #region metadata
         public class POCOViewModel_WithMetadata {
             [BindableProperty(false)]
