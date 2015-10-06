@@ -687,25 +687,6 @@ namespace DevExpress.Mvvm.Tests {
             var methodExpression = Expression.Lambda<Action<ViewModelWithFunctionCommandMethod>>(Expression.Invoke(expression, parameter2), parameter2);
             Assert.IsNotNull(POCOViewModelExtensions.GetCommand(viewModel, methodExpression));
         }
-        [Test]
-        public void PropertyChangedTest_VB() {
-            VbPOCOViewModel viewModel = ViewModelSource.Create<VbPOCOViewModel>();
-            CheckBindableProperty(viewModel, x => x.AutoImlementedProperty, (vm, x) => vm.AutoImlementedProperty = x, 1, 2, (x, val) => Assert.AreEqual(val, x.AutoImlementedPropertyOldValue));
-            CheckNotBindableProperty(viewModel, x => x.AutoImlementedNonVirtualProperty, (vm, x) => vm.AutoImlementedNonVirtualProperty = x, 1, 2);
-            CheckBindableProperty(viewModel, x => x.AutoImlementedEntityProperty, (vm, x) => vm.AutoImlementedEntityProperty = x, new TestEntity(), new TestEntity());
-            CheckNotBindableProperty(viewModel, x => x.PseudoAutoImplementedProperty_WrongFieldName, (vm, x) => vm.PseudoAutoImplementedProperty_WrongFieldName = x, 1, 2);
-            CheckNotBindableProperty(viewModel, x => x.PseudoAutoImplementedProperty_NoAttributeOnField, (vm, x) => vm.PseudoAutoImplementedProperty_NoAttributeOnField = x, 1, 2);
-            CheckNotBindableProperty(viewModel, x => x.PseudoAutoImplementedProperty_WrongParameterName, (vm, x) => vm.PseudoAutoImplementedProperty_WrongParameterName = x, 1, 2);
-            CheckNotBindableProperty(viewModel, x => x.PseudoAutoImplementedProperty_WrongFieldType, (vm, x) => vm.PseudoAutoImplementedProperty_WrongFieldType = x, 1, 2);
-            CheckBindableProperty(viewModel, x => x.PseudoAutoImplementedProperty, (vm, x) => vm.PseudoAutoImplementedProperty = x, 1, 2);
-        }
-        [Test]
-        public void PropertyNameInSetterAndGetterShouldMatchTest_VB() {
-            var obj = new PropertyNameInSetterAndGetterShouldMatch();
-            obj.Test(BindableBase.GetPropertyName);
-            Assert.IsNotNull(obj.nameInGetter);
-            Assert.AreEqual(obj.nameInGetter, obj.nameInSetter);
-        }
         #endregion
 
         #region property changing
