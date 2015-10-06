@@ -689,44 +689,6 @@ namespace DevExpress.Mvvm.Tests {
         }
         #endregion
 
-        #region property changing
-        public class POCOViewModel_PropertyChanging {
-            public virtual string Property1 { get; set; }
-            public string Property1NewValue;
-            protected void OnProperty1Changing(string newValue) {
-                Assert.AreNotEqual(newValue, Property1);
-                Property1NewValue = newValue;
-            }
-
-            public virtual string Property2 { get; set; }
-            public int Property2ChangingCallCount;
-            protected void OnProperty2Changing() {
-                Assert.AreEqual(null, Property2);
-                Property2ChangingCallCount++;
-            }
-
-            string property3;
-            [BindableProperty]
-            public virtual string Property3 { get { return property3; } set { property3 = value; } }
-            protected void OnProperty3Changing() {
-                throw new NotImplementedException();
-            }
-        }
-        [Test]
-        public void PropertyChangingTest() {
-            POCOViewModel_PropertyChanging viewModel = ViewModelSource.Create<POCOViewModel_PropertyChanging>();
-            viewModel.Property1 = null;
-            viewModel.Property1 = "x";
-            Assert.AreEqual("x", viewModel.Property1NewValue);
-
-            viewModel.Property2 = null;
-            viewModel.Property2 = "x";
-            Assert.AreEqual(1, viewModel.Property2ChangingCallCount);
-
-            viewModel.Property3 = "x";
-        }
-        #endregion
-
         #region metadata
         public class POCOViewModel_WithMetadata {
             [BindableProperty(false)]
