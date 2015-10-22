@@ -690,30 +690,6 @@ namespace DevExpress.Mvvm.Tests {
         #endregion
 
         #region metadata
-        public class POCOViewModel_WithMetadata {
-            [BindableProperty(false)]
-            public virtual string NotBindableProperty { get; set; }
-
-            string notAutoImplementedProperty;
-            [BindableProperty]
-            public virtual string NotAutoImplementedProperty { get { return notAutoImplementedProperty; } set { notAutoImplementedProperty = value; } }
-
-            public string CustomProperytChangedOldValue;
-            string customProperytChanged;
-            [BindableProperty(OnPropertyChangedMethodName = "OnCustomProperytChanged")]
-            public virtual string CustomProperytChanged { get { return customProperytChanged; } set { customProperytChanged = value; } }
-            protected void OnCustomProperytChanged(string oldValue) {
-                CustomProperytChangedOldValue = oldValue;
-            }
-
-            [BindableProperty(OnPropertyChangingMethodName = "MyPropertyChanging")]
-            public virtual string PropertyChanging { get; set; }
-            public string PropertyChangingNewValue;
-            protected void MyPropertyChanging(string newValue) {
-                Assert.AreNotEqual(newValue, PropertyChanging);
-                PropertyChangingNewValue = newValue;
-            }
-        }
         [MetadataType(typeof(POCOViewModel_WithMetadata_FluentAPIMetadata))]
         public class POCOViewModel_WithMetadata_FluentAPI {
             public class POCOViewModel_WithMetadata_FluentAPIMetadata : IMetadataProvider<POCOViewModel_WithMetadata_FluentAPI> {
@@ -744,18 +720,6 @@ namespace DevExpress.Mvvm.Tests {
                 Assert.AreNotEqual(newValue, PropertyChanging);
                 PropertyChangingNewValue = newValue;
             }
-        }
-
-        [Test]
-        public void OverridingPropertyTest_Metadata() {
-            POCOViewModel_WithMetadata viewModel = ViewModelSource.Create<POCOViewModel_WithMetadata>();
-            CheckNotBindableProperty(viewModel, x => x.NotBindableProperty, (vm, x) => vm.NotBindableProperty = x, "x", "y");
-            CheckBindableProperty(viewModel, x => x.NotAutoImplementedProperty, (vm, x) => vm.NotAutoImplementedProperty = x, "x", "y");
-            CheckBindableProperty(viewModel, x => x.CustomProperytChanged, (vm, x) => vm.CustomProperytChanged = x, "x", "y", (x, val) => Assert.AreEqual(val, x.CustomProperytChangedOldValue));
-
-            viewModel.PropertyChanging = null;
-            viewModel.PropertyChanging = "x";
-            Assert.AreEqual("x", viewModel.PropertyChangingNewValue);
         }
 
         [Test]
@@ -1992,8 +1956,6 @@ namespace DevExpress.Mvvm.Tests {
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_INPC)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_Command_Attribute)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_PropertyChanged)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_PropertyChanging)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_WithMetadata)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_WithMetadata_FluentAPI)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOCommandsViewModel)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_VirtualProperty_NoDefaultCtor)));
