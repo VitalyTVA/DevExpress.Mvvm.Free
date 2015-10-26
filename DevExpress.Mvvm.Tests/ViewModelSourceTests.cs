@@ -641,7 +641,7 @@ namespace DevExpress.Mvvm.Tests {
             Assert.IsFalse(viewModel.IsInDesignMode());
         }
 
-        #region property changed
+        #region property changed - vb only
         public class POCOViewModel_PropertyChangedBase {
             protected virtual void OnProtectedChangedMethodWithParamChanged(string oldValue) { }
             public virtual bool SealedProperty { get; set; }
@@ -689,7 +689,7 @@ namespace DevExpress.Mvvm.Tests {
         }
         #endregion
 
-        #region metadata
+        #region metadata - fluent only
         [MetadataType(typeof(POCOViewModel_WithMetadata_FluentAPIMetadata))]
         public class POCOViewModel_WithMetadata_FluentAPI {
             public class POCOViewModel_WithMetadata_FluentAPIMetadata : IMetadataProvider<POCOViewModel_WithMetadata_FluentAPI> {
@@ -732,31 +732,6 @@ namespace DevExpress.Mvvm.Tests {
             viewModel.PropertyChanging = null;
             viewModel.PropertyChanging = "x";
             Assert.AreEqual("x", viewModel.PropertyChangingNewValue);
-        }
-        #endregion
-
-        #region IPOCOViewModelImplementation
-        [Test]
-        public void IPOCOViewModelImplementation() {
-            var viewModel = ViewModelSource.Create<POCOViewModel>();
-            string propertyName = null;
-            ((INotifyPropertyChanged)viewModel).PropertyChanged += (o, e) => propertyName = e.PropertyName;
-            ((IPOCOViewModel)viewModel).RaisePropertyChanged("Property1");
-            Assert.AreEqual("Property1", propertyName);
-
-            viewModel.RaisePropertyChanged(x => x.Property5);
-            Assert.AreEqual("Property5", propertyName);
-
-            viewModel.RaisePropertiesChanged();
-            Assert.AreEqual(string.Empty, propertyName);
-        }
-        [Test]
-        public void GetSetParentViewModel() {
-            var viewModel = ViewModelSource.Create<POCOViewModel>();
-            Assert.IsNull(viewModel.GetParentViewModel<Button>());
-            var b = new Button();
-            Assert.AreSame(viewModel, viewModel.SetParentViewModel(b));
-            Assert.AreEqual(b, viewModel.GetParentViewModel<Button>());
         }
         #endregion
 
