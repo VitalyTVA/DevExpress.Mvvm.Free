@@ -802,30 +802,6 @@ namespace DevExpress.Mvvm.Tests {
             public void RefParameter(ref int x) { x = 0; }
             public int MethodWithReturnValue() { return 0; }
         }
-        [Test]
-        public void CommandsGeneration() {
-            POCOCommandsViewModel viewModel = ViewModelSource.Create<POCOCommandsViewModel>();
-            CheckCommand(viewModel, x => x.Show(), x => Assert.AreEqual(1, x.ShowCallCount));
-            CheckCommand(viewModel, x => x.ShowAsync(), x => Assert.AreEqual(1, x.ShowAsyncCallCount), true);
-            CheckCommand(viewModel, x => x.Save(), x => Assert.AreEqual(1, x.SaveCallCount));
-            CheckCommand(viewModel, x => x.Close(null), x => Assert.AreEqual(1, x.CloseCallCount));
-            CheckNoCommand(viewModel, "InternalMethod");
-            CheckNoCommand(viewModel, "ToString");
-            CheckNoCommand(viewModel, "GetHashCode");
-            CheckNoCommand(viewModel, "Equals");
-            CheckNoCommand(viewModel, "ProtectedAsyncMethod");
-            CheckNoCommand(viewModel, "ProtectedMethod");
-            CheckNoCommand(viewModel, "get_Property1");
-            CheckNoCommand(viewModel, "set_Property1");
-            CheckNoCommand(viewModel, "StaticMethod");
-            CheckNoCommand(viewModel, "OutParameter");
-            CheckNoCommand(viewModel, "RefParameter");
-            CheckNoCommand(viewModel, "MethodWithReturnValue");
-
-            Assert.AreEqual(typeof(ICommand), viewModel.GetType().GetProperty("ShowCommand").PropertyType);
-            Assert.AreEqual(typeof(DelegateCommand<string>), viewModel.GetType().GetProperty("CloseCommand").PropertyType);
-            Assert.AreEqual(typeof(AsyncCommand), viewModel.GetType().GetProperty("ShowAsyncCommand").PropertyType);
-        }
 
         public class POCOCommandsCanExecute {
             public int ShowCallCount;
