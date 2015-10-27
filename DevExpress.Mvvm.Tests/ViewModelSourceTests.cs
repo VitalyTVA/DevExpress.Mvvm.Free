@@ -771,30 +771,6 @@ namespace DevExpress.Mvvm.Tests {
             public int MethodWithReturnValue() { return 0; }
         }
 
-        public class POCOAsyncCommands {
-            public Task Show() {
-                return null;
-            }
-            public bool CanShowValue;
-            public bool CanShow() {
-                return CanShowValue;
-            }
-            [AsyncCommand(AllowMultipleExecution = true)]
-            public Task Open(string parameter) {
-                return null;
-            }
-            public bool CanOpen(string parameter) {
-                return parameter != "x";
-            }
-        }
-        [Test]
-        public void AsyncCommandAllowMultipleExecutionAttributeTest() {
-            POCOAsyncCommands viewModel = ViewModelSource.Create<POCOAsyncCommands>();
-            AsyncCommand asyncCommand1 = (AsyncCommand)TypeHelper.GetPropertyValue(viewModel, "ShowCommand");
-            Assert.IsFalse(asyncCommand1.AllowMultipleExecution);
-            AsyncCommand<string> asyncCommand2 = (AsyncCommand<string>)TypeHelper.GetPropertyValue(viewModel, "OpenCommand");
-            Assert.IsTrue(asyncCommand2.AllowMultipleExecution);
-        }
 
         public abstract class CommandAttributeViewModelBaseCounters {
             public int BaseClassCommandCallCount;
