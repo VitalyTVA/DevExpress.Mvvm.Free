@@ -390,18 +390,6 @@ namespace DevExpress.Mvvm.Tests {
         }
 
         [Test]
-        public void CallRaiseCommandChangedMethodExtensionMethodForNotPOCOViewModelTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                new POCOCommandsViewModel().RaiseCanExecuteChanged(x => x.Save());
-            }, x => Assert.AreEqual("Object doesn't implement IPOCOViewModel.", x.Message));
-        }
-        [Test]
-        public void CallGetCommandMethodExtensionMethodForNotPOCOViewModelTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                new POCOCommandsViewModel().GetCommand(x => x.Save());
-            }, x => Assert.AreEqual("Object doesn't implement IPOCOViewModel.", x.Message));
-        }
-        [Test]
         public void CallRaiseCommandChangedMethodExtensionMethodForNotCommandMethod() {
             AssertHelper.AssertThrows<ViewModelSourceException>(() => {
                 ViewModelSource.Create<CommandAttributeViewModel>().RaiseCanExecuteChanged(x => x.NoAttribute());
@@ -1784,7 +1772,6 @@ namespace DevExpress.Mvvm.Tests {
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_Command_Attribute)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_PropertyChanged)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_WithMetadata_FluentAPI)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOCommandsViewModel)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_VirtualProperty_NoDefaultCtor)));
 
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CommandAttributeViewModel)));
