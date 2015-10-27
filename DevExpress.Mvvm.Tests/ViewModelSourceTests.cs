@@ -771,62 +771,6 @@ namespace DevExpress.Mvvm.Tests {
             public int MethodWithReturnValue() { return 0; }
         }
 
-        public class POCOCommandsCanExecute {
-            public int ShowCallCount;
-            public void Show() {
-                ShowCallCount++;
-            }
-            public bool CanShowValue;
-            public bool CanShow() {
-                return CanShowValue;
-            }
-
-            public int OpenCallCount;
-            public string OpenLastParameter;
-            public void Open(string parameter) {
-                OpenCallCount++;
-                OpenLastParameter = parameter;
-            }
-            public bool CanOpen(string parameter) {
-                return parameter != "x";
-            }
-
-            public int CloseCallCount;
-            public int CloseLastParameter;
-            public void Close(int parameter) {
-                CloseCallCount++;
-                CloseLastParameter = parameter;
-            }
-            public bool CanClose(int parameter) {
-                return parameter != 9;
-            }
-        }
-        [Test]
-        public void CommandsCanExecute() {
-            POCOCommandsCanExecute viewModel = ViewModelSource.Create<POCOCommandsCanExecute>();
-            ICommand command = (ICommand)TypeHelper.GetPropertyValue(viewModel, "ShowCommand");
-            Assert.IsFalse(command.CanExecute(null));
-            viewModel.CanShowValue = true;
-            Assert.IsTrue(command.CanExecute(null));
-
-            command = (ICommand)TypeHelper.GetPropertyValue(viewModel, "OpenCommand");
-            Assert.IsTrue(command.CanExecute("y"));
-            Assert.IsFalse(command.CanExecute("x"));
-            Assert.AreEqual(0, viewModel.OpenCallCount);
-            command.Execute("z");
-            Assert.AreEqual("z", viewModel.OpenLastParameter);
-            Assert.AreEqual(1, viewModel.OpenCallCount);
-
-            command = (ICommand)TypeHelper.GetPropertyValue(viewModel, "CloseCommand");
-            Assert.IsFalse(command.CanExecute(9));
-            Assert.IsTrue(command.CanExecute(13));
-            Assert.IsFalse(command.CanExecute("9"));
-            Assert.IsTrue(command.CanExecute("13"));
-            Assert.AreEqual(0, viewModel.CloseCallCount);
-            command.Execute("117");
-            Assert.AreEqual(117, viewModel.CloseLastParameter);
-            Assert.AreEqual(1, viewModel.CloseCallCount);
-        }
         public class POCOAsyncCommands {
             public Task Show() {
                 return null;
@@ -1879,7 +1823,6 @@ namespace DevExpress.Mvvm.Tests {
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOCommandsViewModel)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_VirtualProperty_NoDefaultCtor)));
 
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOCommandsCanExecute)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CommandAttributeViewModel)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CommandAttributeViewModel_FluentAPI)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_CommandsInViewModelBaseDescendant)));
