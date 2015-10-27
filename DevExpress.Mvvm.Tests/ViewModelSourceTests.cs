@@ -788,18 +788,6 @@ namespace DevExpress.Mvvm.Tests {
             }
         }
         [Test]
-        public void AsyncCommandsCanExecute() {
-            POCOAsyncCommands viewModel = ViewModelSource.Create<POCOAsyncCommands>();
-            IAsyncCommand asyncCommand = (IAsyncCommand)TypeHelper.GetPropertyValue(viewModel, "ShowCommand");
-            Assert.IsFalse(asyncCommand.CanExecute(null));
-            viewModel.CanShowValue = true;
-            Assert.IsTrue(asyncCommand.CanExecute(null));
-
-            asyncCommand = (IAsyncCommand)TypeHelper.GetPropertyValue(viewModel, "OpenCommand");
-            Assert.IsTrue(asyncCommand.CanExecute("y"));
-            Assert.IsFalse(asyncCommand.CanExecute("x"));
-        }
-        [Test]
         public void AsyncCommandAllowMultipleExecutionAttributeTest() {
             POCOAsyncCommands viewModel = ViewModelSource.Create<POCOAsyncCommands>();
             AsyncCommand asyncCommand1 = (AsyncCommand)TypeHelper.GetPropertyValue(viewModel, "ShowCommand");
