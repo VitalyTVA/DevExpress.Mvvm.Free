@@ -875,11 +875,6 @@ namespace DevExpress.Mvvm.Tests {
             public bool CanMethodWithCustomCanExecute_() { return MethodWithCustomCanExecuteCanExcute; }
         }
         [Test, Asynchronous]
-        public void CommandAttribute_ViewModelTest() {
-            var viewModel = ViewModelSource.Create<CommandAttributeViewModel>();
-            CommandAttribute_ViewModelTestCore(viewModel, x => viewModel.MethodWithCanExecute(), x => viewModel.MethodWithCustomCanExecute());
-        }
-        [Test, Asynchronous]
         public void CommandAttribute_ViewModelTest_FluentAPI() {
             var viewModel = ViewModelSource.Create<CommandAttributeViewModel_FluentAPI>();
             CommandAttribute_ViewModelTestCore(viewModel, x => viewModel.MethodWithCanExecute(), x => viewModel.MethodWithCustomCanExecute());
@@ -1733,7 +1728,6 @@ namespace DevExpress.Mvvm.Tests {
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_WithMetadata_FluentAPI)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_VirtualProperty_NoDefaultCtor)));
 
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CommandAttributeViewModel)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CommandAttributeViewModel_FluentAPI)));
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_CommandsInViewModelBaseDescendant)));
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors)));
