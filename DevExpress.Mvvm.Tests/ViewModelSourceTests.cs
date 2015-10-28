@@ -723,7 +723,7 @@ namespace DevExpress.Mvvm.Tests {
         }
         #endregion
 
-        #region commands
+        #region commands - fluent only
         [CLSCompliant(false)]
         public class POCOCommandsViewModel {
             public virtual string Property1 { get; set; }
