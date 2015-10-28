@@ -1208,46 +1208,6 @@ namespace DevExpress.Mvvm.Tests {
         }
         #endregion
 
-        #region inheriting INotifyPropertyCanged
-        public class POCOViewModel_BindableBaseDescendant : BindableBase {
-            public virtual string Property1 { get; set; }
-
-            string property2;
-            public string Property2 {
-                get { return property2; }
-                set { SetProperty(ref property2, value, () => Property2); }
-            }
-        }
-        [Test]
-        public void InheritBindableBaseTest() {
-            var viewModel = ViewModelSource.Create<POCOViewModel_BindableBaseDescendant>();
-            var interfaces = viewModel.GetType().GetInterfaces();
-            CheckBindableProperty(viewModel, x => x.Property1, (vm, x) => vm.Property1 = x, "x", "y");
-            CheckBindableProperty(viewModel, x => x.Property2, (vm, x) => vm.Property2 = x, "x", "y");
-        }
-        public class POCOViewModel_INPCImplementorBase : INotifyPropertyChanged {
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected void RaisePropertyChangedCore(string propertyName) {
-                if(PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-            public virtual void RaisePropertyChanged(string propertyName) {
-            }
-        }
-        public class POCOViewModel_INPCImplementor : POCOViewModel_INPCImplementorBase {
-            public virtual string Property1 { get; set; }
-            public override void RaisePropertyChanged(string propertyName) {
-                RaisePropertyChangedCore(propertyName);
-            }
-        }
-        [Test]
-        public void INPCImplementorTest() {
-            var viewModel = ViewModelSource.Create<POCOViewModel_INPCImplementor>();
-            var interfaces = viewModel.GetType().GetInterfaces();
-            CheckBindableProperty(viewModel, x => x.Property1, (vm, x) => vm.Property1 = x, "x", "y");
-        }
-        #endregion
-
         #region services
         public class ParentViewModel : ViewModelBase { }
         public class SomeService { }
@@ -1696,10 +1656,6 @@ namespace DevExpress.Mvvm.Tests {
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors_ProtectedDefaultCtor)));
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors_NoDefaultCtor)));
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_CreateViaGenericParameters)));
-
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_BindableBaseDescendant)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_INPCImplementorBase)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_INPCImplementor)));
 
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_ServicesViaCustomImplementation)));
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_Services)));
