@@ -969,24 +969,6 @@ namespace DevExpress.Mvvm.Tests {
             EnqueueTestComplete();
         }
 
-        public class POCOViewModel_CommandsInViewModelBaseDescendant : ViewModelBase {
-            [Command]
-            public void Save() { SaveCallCount++; }
-            public int SaveCallCount;
-        }
-        [Test]
-        public void CommandsInViewModelBaseDescendant() {
-            var viewModel = ViewModelSource.Create<POCOViewModel_CommandsInViewModelBaseDescendant>();
-            var command = CheckCommand(viewModel, x => x.Save(), x => Assert.AreEqual(1, x.SaveCallCount));
-            Assert.IsNotNull(TypeHelper.GetPropertyValue(viewModel, "SaveCommand"));
-            int canExecuteChangedCount = 0;
-            command.CanExecuteChanged += (x, e) => canExecuteChangedCount++;
-            viewModel.RaiseCanExecuteChanged(() => viewModel.Save());
-#if !SILVERLIGHT
-            DispatcherHelper.DoEvents();
-#endif
-            Assert.AreEqual(1, canExecuteChangedCount);
-        }
         public class POCOViewModel_AsyncCommandsInViewModelBaseDescendant : ViewModelBase {
             public Task Save() {
                 return Task.Factory.StartNew(() => SaveCallCount++);
@@ -1729,7 +1711,6 @@ namespace DevExpress.Mvvm.Tests {
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_VirtualProperty_NoDefaultCtor)));
 
             Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CommandAttributeViewModel_FluentAPI)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_CommandsInViewModelBaseDescendant)));
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors)));
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors_ProtectedDefaultCtor)));
             Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors_NoDefaultCtor)));
