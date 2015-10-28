@@ -969,25 +969,6 @@ namespace DevExpress.Mvvm.Tests {
             EnqueueTestComplete();
         }
 
-        public class POCOViewModel_AsyncCommandsInViewModelBaseDescendant : ViewModelBase {
-            public Task Save() {
-                return Task.Factory.StartNew(() => SaveCallCount++);
-            }
-            public int SaveCallCount;
-        }
-        [Test]
-        public void AsyncCommandsInViewModelBaseDescendant() {
-            var viewModel = ViewModelSource.Create<POCOViewModel_AsyncCommandsInViewModelBaseDescendant>();
-            var command = CheckCommand(viewModel, x => x.Save(), x => Assert.AreEqual(1, x.SaveCallCount), true);
-            Assert.IsNotNull(TypeHelper.GetPropertyValue(viewModel, "SaveCommand"));
-            int canExecuteChangedCount = 0;
-            command.CanExecuteChanged += (x, e) => canExecuteChangedCount++;
-            viewModel.RaiseCanExecuteChanged(() => viewModel.Save());
-#if !SILVERLIGHT
-            DispatcherHelper.DoEvents();
-#endif
-            Assert.AreEqual(1, canExecuteChangedCount);
-        }
         #endregion
         #region non default constructors
         public class POCOViewModel_NonDefaultConstructors {
