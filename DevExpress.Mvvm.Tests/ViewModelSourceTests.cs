@@ -804,42 +804,6 @@ namespace DevExpress.Mvvm.Tests {
             public void MethodWithCustomCanExecute() { }
             public bool CanMethodWithCustomCanExecute_() { return MethodWithCustomCanExecuteCanExcute; }
         }
-        public class AsyncCommandAttributeViewModel : CommandAttributeViewModelBase {
-            public Task Simple() {
-                return Task.Factory.StartNew(() => SimpleMethodCallCount++);
-            }
-            public Task MethodWith() {
-                return Task.Factory.StartNew(() => MethodWithCommandCallCount++);
-            }
-
-            [AsyncCommand(false)]
-            public Task NoAttribute() { return null; }
-
-            [AsyncCommand(Name = "MyCommand")]
-            public Task CustomName() {
-                return Task.Factory.StartNew(() => CustomNameCommandCallCount++);
-
-            }
-
-            public Task MethodWithCanExecute() { return null; }
-            public bool CanMethodWithCanExecute() { return MethodWithCanExecuteCanExcute; }
-
-            public Task MethodWithParameter(int parameter) {
-                return Task.Factory.StartNew(() => {
-                    MethodWithParameterCallCount++;
-                    MethodWithParameterLastParameter = parameter;
-                });
-            }
-            public bool CanMethodWithParameter(int parameter) { return parameter != 13; }
-
-            [Command(CanExecuteMethodName = "CanMethodWithCustomCanExecute_"
-#if !SILVERLIGHT
-, UseCommandManager = false
-#endif
-)]
-            public Task MethodWithCustomCanExecute() { return null; }
-            public bool CanMethodWithCustomCanExecute_() { return MethodWithCustomCanExecuteCanExcute; }
-        }
         [MetadataType(typeof(Metadata))]
         public class CommandAttributeViewModel_FluentAPI : CommandAttributeViewModelBaseCounters {
             public class Metadata : IMetadataProvider<CommandAttributeViewModel_FluentAPI> {
@@ -924,11 +888,6 @@ namespace DevExpress.Mvvm.Tests {
         public void CommandAttribute_ViewModelTest_ExternalMetadata() {
             var viewModel = ViewModelSource.Create<CommandAttributeViewModel_ExternalMetadata>();
             CommandAttribute_ViewModelTestCore(viewModel, x => viewModel.MethodWithCanExecute(), x => viewModel.MethodWithCustomCanExecute());
-        }
-        [Test, Asynchronous]
-        public void AsyncCommandAttribute_ViewModelTest() {
-            var viewModel = ViewModelSource.Create<AsyncCommandAttributeViewModel>();
-            CommandAttribute_ViewModelTestCore(viewModel, x => viewModel.MethodWithCanExecute(), x => viewModel.MethodWithCustomCanExecute(), true);
         }
 
         void CommandAttribute_ViewModelTestCore(CommandAttributeViewModelBaseCounters viewModel, Expression<Action<CommandAttributeViewModelBaseCounters>> methodWithCanExecuteExpression, Expression<Action<CommandAttributeViewModelBaseCounters>> methodWithCustomCanExecuteExpression, bool IsAsyncCommand = false) {
