@@ -807,9 +807,6 @@ namespace DevExpress.Mvvm.Tests {
         }
         #endregion
 
-        #region inheritance
-        #endregion
-
         #region IsPOCOViewModel
         #region classes
         public class IsPOCO_Empty { }
