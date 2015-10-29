@@ -389,13 +389,6 @@ namespace DevExpress.Mvvm.Tests {
             }, x => Assert.AreEqual("Member with the same command name already exists: ShowCommand.", x.Message));
         }
 
-        [Test]
-        public void CallRaiseCommandChangedMethodExtensionMethodForNotCommandMethod() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<CommandAttributeViewModel>().RaiseCanExecuteChanged(x => x.NoAttribute());
-            }, x => Assert.AreEqual("Command not found: NoAttributeCommand.", x.Message));
-        }
-
         public class DuplicateNamesViewModel {
             [Command(Name = "MyCommand")]
             public void Method1() { }
@@ -559,54 +552,6 @@ namespace DevExpress.Mvvm.Tests {
         }
         #endregion
 
-        #region services
-        public class Services_NotServiceType {
-            [ServiceProperty]
-            public virtual SomeService Property { get { return null; } }
-        }
-        [Test]
-        public void Services_NotServiceTypeTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create(() => new Services_NotServiceType());
-            }, x => Assert.AreEqual("Service properties should have an interface type: Property.", x.Message));
-        }
-
-        public class Services_PropertyIsNotVirtual {
-            [ServiceProperty]
-            public IMessageBoxService Property { get { return null; } }
-        }
-        [Test]
-        public void Services_PropertyIsNotVirtualTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create(() => new Services_PropertyIsNotVirtual());
-            }, x => Assert.AreEqual("Property is not virtual: Property.", x.Message));
-        }
-
-        public class Services_PropertyIsSealedBase {
-            public virtual IMessageBoxService Property { get { return null; } }
-        }
-        public class Services_PropertyIsSealed : Services_PropertyIsSealedBase {
-            [ServiceProperty]
-            public override sealed IMessageBoxService Property { get { return null; } }
-        }
-        [Test]
-        public void Services_PropertyIsSealedTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create(() => new Services_PropertyIsSealed());
-            }, x => Assert.AreEqual("Cannot override final property: Property.", x.Message));
-        }
-
-        public class Services_PropertyHasSetter {
-            [ServiceProperty]
-            public virtual IMessageBoxService Property { get; set; }
-        }
-        [Test]
-        public void Services_PropertyHasSetterTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create(() => new Services_PropertyHasSetter());
-            }, x => Assert.AreEqual("Property with setter cannot be Service Property: Property.", x.Message));
-        }
-        #endregion
 #pragma warning restore 0618
         #endregion
 
@@ -622,11 +567,6 @@ namespace DevExpress.Mvvm.Tests {
             } finally {
                 ViewModelDesignHelper.IsInDesignModeOverride = null;
             }
-        }
-        [Test]
-        public void IsInDesignMode_NotPOCOViewModelTest() {
-            POCOViewModel_PropertyChanged viewModel = new POCOViewModel_PropertyChanged();
-            Assert.IsFalse(viewModel.IsInDesignMode());
         }
 
         #region non default constructors
@@ -867,20 +807,6 @@ namespace DevExpress.Mvvm.Tests {
         }
         #endregion
 
-        #region IsInDesignMode
-        [Test]
-        public void IsInDesignModeTest() {
-            POCOViewModel_PropertyChanged viewModel = ViewModelSource.Create<POCOViewModel_PropertyChanged>();
-            Assert.IsFalse(viewModel.IsInDesignMode());
-            ViewModelDesignHelper.IsInDesignModeOverride = true;
-            try {
-                Assert.IsTrue(viewModel.IsInDesignMode());
-            } finally {
-                ViewModelDesignHelper.IsInDesignModeOverride = null;
-            }
-        }
-        #endregion
-
         #region inheritance
         #endregion
 
@@ -963,92 +889,6 @@ namespace DevExpress.Mvvm.Tests {
         }
 
         #endregion
-        [Test]
-        public void CreateByType() {
-            Assert.AreEqual(13, ((IsPOCO_NoDefaultCtor1)ViewModelSourceHelper.Create(typeof(IsPOCO_NoDefaultCtor1))).X);
-            Assert.AreEqual(0, ((IsPOCO_NoDefaultCtor2)ViewModelSourceHelper.Create(typeof(IsPOCO_NoDefaultCtor2))).X);
-            Assert.AreEqual(0, ((IsPOCO_NoDefaultCtor3)ViewModelSourceHelper.Create(typeof(IsPOCO_NoDefaultCtor3))).X);
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => ViewModelSourceHelper.Create(typeof(IsPOCO_NoDefaultCtor4)));
-            Assert.AreEqual(0, ((IsPOCO_NoDefaultCtor5)ViewModelSourceHelper.Create(typeof(IsPOCO_NoDefaultCtor5))).X);
-            Assert.AreEqual(0, ((IsPOCO_NoDefaultCtor6)ViewModelSourceHelper.Create(typeof(IsPOCO_NoDefaultCtor6))).X);
-        }
-        [Test]
-        public void IsPOCOViewModelTest() {
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Empty)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_NotVirtualProperty)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_VirtualProperty_INPC)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_Command)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_Command2)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_Sealed)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_Command_Attribute_Sealed)));
-
-            #region proeprties
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_InvalidMetadata_BindableAttributeOnNotVirtualProeprty)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithInternalSetter)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithoutSetter)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithoutGetter)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_SealedClass)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_PrivateClass)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(InvalidIPOCOViewModelImplementation)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_INPCImplementor_NoPopertyChanged)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_INPCImplementor_PrivatePopertyChanged)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_INPCImplementor_ByRefPopertyChanged)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_INPCImplementor_OutPopertyChanged)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_INPCImplementor_NoArgPopertyChanged)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_FinalProperty)));
-            #endregion
-
-            #region commands
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_MemberWithCommandName)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_MemberWithCommandName2)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(DuplicateNamesViewModel)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(NotPublicMethodViewModel)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(TooMuchArgumentsMethodViewModel)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(OutParameterMethodViewModel)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(RefParameterMethodViewModel)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(RefParameterMethodViewModel)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CanExecuteParameterCountMismatchViewModel)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CanExecuteParametersMismatchViewModel)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CanExecuteParametersMismatchViewModel2)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(NotPublicCanExecuteViewModel)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(InvalidCanExecuteMethodNameViewModel)));
-            #endregion
-
-            #region ctors and services
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(InternalCtor)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(OnlyInternalCtor)));
-
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(Services_NotServiceType)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(Services_PropertyIsNotVirtual)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(Services_PropertyIsSealedBase)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(Services_PropertyHasSetter)));
-            #endregion
-
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_VirtualProperty)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_INPC)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_Method_Command_Attribute)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_PropertyChanged)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_WithMetadata_FluentAPI)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_VirtualProperty_NoDefaultCtor)));
-
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(CommandAttributeViewModel_FluentAPI)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors_ProtectedDefaultCtor)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_NonDefaultConstructors_NoDefaultCtor)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_CreateViaGenericParameters)));
-
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_ServicesViaCustomImplementation)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_Services)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_Services_Metadata)));
-            Assert.AreEqual(false, ViewModelSourceHelper.IsPOCOViewModelType(typeof(POCOViewModel_Services_Metadata_FluentAPI)));
-
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_NoDefaultCtor1)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_NoDefaultCtor2)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_NoDefaultCtor3)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_NoDefaultCtor5)));
-            Assert.AreEqual(true, ViewModelSourceHelper.IsPOCOViewModelType(typeof(IsPOCO_NoDefaultCtor6)));
-        }
         #endregion
 
         #region IDataErrorInfo
