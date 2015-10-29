@@ -528,6 +528,44 @@ namespace DevExpress.Mvvm.Tests {
             }, x => Assert.AreEqual("Type has no accessible constructors: OnlyInternalCtor.", x.Message));
         }
 
+        public class POCOViewModel_CreateViaGenericParameters {
+            string constructorInfo;
+            public string ConstructorInfo { get { return constructorInfo; } set { Assert.IsTrue(this is IPOCOViewModel); constructorInfo = value; } }
+            public POCOViewModel_CreateViaGenericParameters() {
+                ConstructorInfo = "";
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1) {
+                ConstructorInfo = p1;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2) {
+                ConstructorInfo = p1 + p2;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3) {
+                ConstructorInfo = p1 + p2 + p3;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4) {
+                ConstructorInfo = p1 + p2 + p3 + p4;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5) {
+                ConstructorInfo = p1 + p2 + p3 + p4 + p5;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6) {
+                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7) {
+                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6 + p7;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8) {
+                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8, long p9) {
+                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9;
+            }
+            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8, long p9, short p10) {
+                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10;
+            }
+        }
+
         [Test]
         public void CreateViaGenericParameters_InvalidParaneterTypes() {
             AssertHelper.AssertThrows<ViewModelSourceException>(() => {
@@ -568,244 +606,6 @@ namespace DevExpress.Mvvm.Tests {
                 ViewModelDesignHelper.IsInDesignModeOverride = null;
             }
         }
-
-        #region non default constructors
-        public class POCOViewModel_NonDefaultConstructors {
-            public string Property1 { get; set; }
-            public string Property2 { get; set; }
-
-            public string ConstructorInfo;
-            public POCOViewModel_NonDefaultConstructors() {
-                ConstructorInfo = "public";
-            }
-            public POCOViewModel_NonDefaultConstructors(int x) {
-                ConstructorInfo = "public with param: " + x;
-            }
-            protected POCOViewModel_NonDefaultConstructors(string x) {
-                ConstructorInfo = "protected: " + x;
-            }
-            protected internal POCOViewModel_NonDefaultConstructors(int x, string y) {
-                ConstructorInfo = "protected internal: " + x + y;
-            }
-            POCOViewModel_NonDefaultConstructors(int x, int y) {
-                throw new InvalidOperationException();
-            }
-            internal POCOViewModel_NonDefaultConstructors(int x, int y, int z) {
-                throw new InvalidOperationException();
-            }
-        }
-        [Test]
-        public void NonDefaultConstructors1() {
-            Type type = ViewModelSource.GetPOCOType(typeof(POCOViewModel_NonDefaultConstructors));
-
-            var viewModel1 = (POCOViewModel_NonDefaultConstructors)Activator.CreateInstance(type);
-            Assert.AreEqual("public", viewModel1.ConstructorInfo);
-
-            viewModel1 = (POCOViewModel_NonDefaultConstructors)Activator.CreateInstance(type, new object[] { 13 });
-            Assert.AreEqual("public with param: 13", viewModel1.ConstructorInfo);
-
-            viewModel1 = (POCOViewModel_NonDefaultConstructors)Activator.CreateInstance(type, new object[] { "x" });
-            Assert.AreEqual("protected: x", viewModel1.ConstructorInfo);
-
-            viewModel1 = (POCOViewModel_NonDefaultConstructors)Activator.CreateInstance(type, new object[] { 9, "x" });
-            Assert.AreEqual("protected internal: 9x", viewModel1.ConstructorInfo);
-
-            Assert.IsNull(type.GetConstructor(new[] { typeof(int), typeof(int) }));
-            Assert.IsNull(type.GetConstructor(new[] { typeof(int), typeof(int), typeof(int) }));
-        }
-        int fieldClojure = 117;
-        int PropertyClojure = 253;
-        [Test]
-        public void NonDefaultConstructors2() {
-            var viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors());
-            Assert.AreEqual("public", viewModel1.ConstructorInfo);
-
-            viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors() { Property1 = "p1", Property2 = "p2" });
-            Assert.AreEqual("public", viewModel1.ConstructorInfo);
-            Assert.AreEqual("p1", viewModel1.Property1);
-            Assert.AreEqual("p2", viewModel1.Property2);
-
-            viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors(13));
-            Assert.AreEqual("public with param: 13", viewModel1.ConstructorInfo);
-
-            viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors(7) { Property1 = "p1_", Property2 = "p2_" });
-            Assert.AreEqual("public with param: 7", viewModel1.ConstructorInfo);
-            Assert.AreEqual("p1_", viewModel1.Property1);
-            Assert.AreEqual("p2_", viewModel1.Property2);
-
-            var localVariableClojure = 9;
-            viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors(localVariableClojure + 5));
-            Assert.AreEqual("public with param: 14", viewModel1.ConstructorInfo);
-
-            viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors(fieldClojure));
-            Assert.AreEqual("public with param: 117", viewModel1.ConstructorInfo);
-
-            viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors(PropertyClojure));
-            Assert.AreEqual("public with param: 253", viewModel1.ConstructorInfo);
-
-            viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors(9, "x"));
-            Assert.AreEqual("protected internal: 9x", viewModel1.ConstructorInfo);
-
-            viewModel1 = NonDefaultConstructors2Core(viewModel1, 13, "y");
-        }
-        public class POCOViewModel_NonDefaultConstructors_ProtectedDefaultCtor {
-            public string ConstructorInfo;
-            protected POCOViewModel_NonDefaultConstructors_ProtectedDefaultCtor() {
-                ConstructorInfo = "public";
-            }
-        }
-        private static POCOViewModel_NonDefaultConstructors NonDefaultConstructors2Core(POCOViewModel_NonDefaultConstructors viewModel1, int x, string y) {
-            viewModel1 = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors(x, y));
-            Assert.AreEqual("protected internal: 13y", viewModel1.ConstructorInfo);
-            return viewModel1;
-        }
-
-        [Test]
-        public void NonDefaultConstructors3() {
-            Type type = ViewModelSource.GetPOCOType(typeof(POCOViewModel_NonDefaultConstructors_ProtectedDefaultCtor));
-            var viewModel1 = (POCOViewModel_NonDefaultConstructors_ProtectedDefaultCtor)Activator.CreateInstance(type);
-            Assert.AreEqual("public", viewModel1.ConstructorInfo);
-        }
-        public class POCOViewModel_NonDefaultConstructors_NoDefaultCtor {
-            public string ConstructorInfo;
-            POCOViewModel_NonDefaultConstructors_NoDefaultCtor() {
-                ConstructorInfo = "public";
-            }
-            public POCOViewModel_NonDefaultConstructors_NoDefaultCtor(int x) {
-                ConstructorInfo = "public with param: " + x;
-            }
-        }
-        [Test]
-        public void NonDefaultConstructors4() {
-            var viewModel = ViewModelSource.Create(() => new POCOViewModel_NonDefaultConstructors_NoDefaultCtor(13));
-            Assert.AreEqual("public with param: 13", viewModel.ConstructorInfo);
-        }
-
-        public class POCOViewModel_CreateViaGenericParameters {
-            string constructorInfo;
-            public string ConstructorInfo { get { return constructorInfo; } set { Assert.IsTrue(this is IPOCOViewModel); constructorInfo = value; } }
-            public POCOViewModel_CreateViaGenericParameters() {
-                ConstructorInfo = "";
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1) {
-                ConstructorInfo = p1;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2) {
-                ConstructorInfo = p1 + p2;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3) {
-                ConstructorInfo = p1 + p2 + p3;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4) {
-                ConstructorInfo = p1 + p2 + p3 + p4;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5) {
-                ConstructorInfo = p1 + p2 + p3 + p4 + p5;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6) {
-                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7) {
-                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6 + p7;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8) {
-                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8, long p9) {
-                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9;
-            }
-            public POCOViewModel_CreateViaGenericParameters(string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8, long p9, short p10) {
-                ConstructorInfo = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10;
-            }
-        }
-        [Test]
-        public void GetFactoryTest() {
-            var factory0 = ViewModelSource.Factory(() => new POCOViewModel_CreateViaGenericParameters());
-            Assert.AreSame(factory0, ViewModelSource.Factory(() => new POCOViewModel_CreateViaGenericParameters()));
-            var viewModel = factory0();
-            Assert.AreEqual("", viewModel.ConstructorInfo);
-
-
-            var factory1 = ViewModelSource.Factory((string p1) => new POCOViewModel_CreateViaGenericParameters(p1));
-            Assert.AreSame(factory1, ViewModelSource.Factory((string p1) => new POCOViewModel_CreateViaGenericParameters(p1)));
-            viewModel = factory1("x");
-            Assert.AreEqual("x", viewModel.ConstructorInfo);
-            viewModel = factory1("y");
-            Assert.AreEqual("y", viewModel.ConstructorInfo);
-
-            var factory2 = ViewModelSource.Factory((string p1, int p2) => new POCOViewModel_CreateViaGenericParameters(p1, p2));
-            Assert.AreSame(factory2, ViewModelSource.Factory((string a, int b) => new POCOViewModel_CreateViaGenericParameters(a, b)));
-            viewModel = factory2("x", 1);
-            Assert.AreEqual("x1", viewModel.ConstructorInfo);
-
-            var factory3 = ViewModelSource.Factory((string p1, int p2, bool p3) => new POCOViewModel_CreateViaGenericParameters(p1, p2, p3));
-            viewModel = factory3("x", 1, true);
-            Assert.AreEqual("x1True", viewModel.ConstructorInfo);
-
-            var factory4 = ViewModelSource.Factory((string p1, int p2, bool p3, double p4) => new POCOViewModel_CreateViaGenericParameters(p1, p2, p3, p4));
-            viewModel = factory4("x", 1, true, 2);
-            Assert.AreEqual("x1True2", viewModel.ConstructorInfo);
-
-            var factory5 = ViewModelSource.Factory((string p1, int p2, bool p3, double p4, char p5) => new POCOViewModel_CreateViaGenericParameters(p1, p2, p3, p4, p5));
-            viewModel = factory5("x", 1, true, 2, 'y');
-            Assert.AreEqual("x1True2y", viewModel.ConstructorInfo);
-
-            var factory6 = ViewModelSource.Factory((string p1, int p2, bool p3, double p4, char p5, Visibility p6) => new POCOViewModel_CreateViaGenericParameters(p1, p2, p3, p4, p5, p6));
-            viewModel = factory6("x", 1, true, 2, 'y', Visibility.Visible);
-            Assert.AreEqual("x1True2yVisible", viewModel.ConstructorInfo);
-
-            var factory7 = ViewModelSource.Factory((string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7) => new POCOViewModel_CreateViaGenericParameters(p1, p2, p3, p4, p5, p6, p7));
-            viewModel = factory7("x", 1, true, 2, 'y', Visibility.Visible, 2);
-            Assert.AreEqual("x1True2yVisible2", viewModel.ConstructorInfo);
-
-            var factory8 = ViewModelSource.Factory((string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8) => new POCOViewModel_CreateViaGenericParameters(p1, p2, p3, p4, p5, p6, p7, p8));
-            viewModel = factory8("x", 1, true, 2, 'y', Visibility.Visible, 2, 3);
-            Assert.AreEqual("x1True2yVisible23", viewModel.ConstructorInfo);
-
-            var factory9 = ViewModelSource.Factory((string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8, long p9) => new POCOViewModel_CreateViaGenericParameters(p1, p2, p3, p4, p5, p6, p7, p8, p9));
-            viewModel = factory9("x", 1, true, 2, 'y', Visibility.Visible, 2, 3, 4);
-            Assert.AreEqual("x1True2yVisible234", viewModel.ConstructorInfo);
-
-            var factory10 = ViewModelSource.Factory((string p1, int p2, bool p3, double p4, char p5, Visibility p6, decimal p7, float p8, long p9, short p10) => new POCOViewModel_CreateViaGenericParameters(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10));
-            viewModel = factory10("x", 1, true, 2, 'y', Visibility.Visible, 2, 3, 4, 5);
-            Assert.AreEqual("x1True2yVisible2345", viewModel.ConstructorInfo);
-        }
-        [Test]
-        public void CreateViaGenericParameters() {
-            var viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create();
-            Assert.AreEqual(string.Empty, viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x");
-            Assert.AreEqual("x", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1);
-            Assert.AreEqual("x1", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1, true);
-            Assert.AreEqual("x1True", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1, true, 2.0);
-            Assert.AreEqual("x1True2", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1, true, 2.0, 'y');
-            Assert.AreEqual("x1True2y", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1, true, 2.0, 'y', Visibility.Visible);
-            Assert.AreEqual("x1True2yVisible", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1, true, 2.0, 'y', Visibility.Visible, (decimal)2);
-            Assert.AreEqual("x1True2yVisible2", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1, true, 2.0, 'y', Visibility.Visible, (decimal)2, (float)3);
-            Assert.AreEqual("x1True2yVisible23", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1, true, 2.0, 'y', Visibility.Visible, (decimal)2, (float)3, (long)4);
-            Assert.AreEqual("x1True2yVisible234", viewModel.ConstructorInfo);
-
-            viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create("x", 1, true, 2.0, 'y', Visibility.Visible, (decimal)2, (float)3, (long)4, (short)5);
-            Assert.AreEqual("x1True2yVisible2345", viewModel.ConstructorInfo);
-        }
-        #endregion
 
         #region IsPOCOViewModel
         #region classes
