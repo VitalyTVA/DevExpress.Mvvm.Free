@@ -690,11 +690,6 @@ namespace DevExpress.Mvvm.Tests {
 
         #region IDataErrorInfo
 
-        public class SimpleDataErrorInfoClass {
-            [Required]
-            public virtual string StringProp { get; set; }
-        }
-
         [POCOViewModel(ImplementIDataErrorInfo = true)]
         public class AttributedDataErrorInfoClass {
             [Required]
@@ -745,8 +740,6 @@ namespace DevExpress.Mvvm.Tests {
 
         [Test]
         public void ImplementsDataErrorInfo() {
-            Assert.IsFalse(ViewModelSource.Create<SimpleDataErrorInfoClass>() is IDataErrorInfo);
-
             var vm = ViewModelSource.Create<AttributedDataErrorInfoClass>();
             var asInfo = vm as IDataErrorInfo;
 
