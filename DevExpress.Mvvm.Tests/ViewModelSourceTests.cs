@@ -738,25 +738,6 @@ namespace DevExpress.Mvvm.Tests {
             }
         }
 
-        [Test]
-        public void ImplementsDataErrorInfo() {
-            var vm = ViewModelSource.Create<AttributedDataErrorInfoClass>();
-            var asInfo = vm as IDataErrorInfo;
-
-            var hwvm = new HandwrittenDataErrorInfoClass();
-            Assert.IsTrue(vm is IDataErrorInfo);
-            Assert.AreEqual(hwvm[""], asInfo[""]);
-            Assert.AreEqual(hwvm["StringProp"], asInfo["StringProp"]);
-            Assert.AreEqual(hwvm.Error, asInfo.Error);
-            vm.StringProp = "";
-            hwvm.StringProp = "";
-            Assert.AreEqual(hwvm["StringProp"], asInfo["StringProp"]);
-            Assert.AreEqual(hwvm.Error, asInfo.Error);
-            vm.StringProp = "123";
-            hwvm.StringProp = "123";
-            Assert.AreEqual(hwvm["StringProp"], asInfo["StringProp"]);
-            Assert.AreEqual(hwvm.Error, asInfo.Error);
-        }
 
         [Test]
         public void DoesntThowOnConflicts() {
