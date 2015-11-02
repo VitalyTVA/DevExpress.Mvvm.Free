@@ -61,17 +61,6 @@ namespace DevExpress.Mvvm.Tests {
             }, x => Assert.AreEqual("Cannot make non-virtual property bindable: Property.", x.Message));
         }
 
-        public class POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithInternalSetter {
-            [BindableProperty]
-            public virtual string Property { get; internal set; }
-        }
-        [Test]
-        public void POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithInternalSetterTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithInternalSetter>();
-            }, x => Assert.AreEqual("Cannot make property with internal setter bindable: Property.", x.Message));
-        }
-
         public class POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithoutSetter {
             [BindableProperty]
             public virtual string Property { get { return null; } }
