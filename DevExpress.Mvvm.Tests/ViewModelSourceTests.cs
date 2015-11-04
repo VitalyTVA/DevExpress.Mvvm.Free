@@ -62,15 +62,6 @@ namespace DevExpress.Mvvm.Tests {
             }, x => Assert.AreEqual("Cannot create dynamic class for the sealed class: POCOViewModel_SealedClass.", x.Message));
         }
 
-        class POCOViewModel_PrivateClass {
-        }
-        [Test]
-        public void POCOViewModel_PrivateClassTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_PrivateClass>();
-            }, x => Assert.AreEqual("Cannot create dynamic class for the internal class: POCOViewModel_PrivateClass.", x.Message));
-        }
-
         public class POCOViewModel_TwoPropertyChangedMethods {
             public virtual string Property { get; set; }
             protected void OnPropertyChanged() { }
