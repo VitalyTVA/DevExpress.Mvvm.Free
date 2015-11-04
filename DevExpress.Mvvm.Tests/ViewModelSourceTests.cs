@@ -50,17 +50,6 @@ namespace DevExpress.Mvvm.Tests {
         #region errors
 #pragma warning disable 0618
         #region properties
-        public class POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithoutSetter {
-            [BindableProperty]
-            public virtual string Property { get { return null; } }
-        }
-        [Test]
-        public void POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithoutSetterTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithoutSetter>();
-            }, x => Assert.AreEqual("Cannot make property without setter bindable: Property.", x.Message));
-        }
-
         public class POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithoutGetter {
             [BindableProperty]
             public virtual string Property { private get; set; }
