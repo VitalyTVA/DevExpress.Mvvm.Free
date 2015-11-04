@@ -50,17 +50,6 @@ namespace DevExpress.Mvvm.Tests {
         #region errors
 #pragma warning disable 0618
         #region properties
-        public class POCOViewModel_InvalidMetadata_BindableAttributeOnNotVirtualProeprty {
-            [BindableProperty]
-            public string Property { get; set; }
-        }
-        [Test]
-        public void POCOViewModel_InvalidMetadata_BindableAttributeOnNotVirtualProeprtyTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_InvalidMetadata_BindableAttributeOnNotVirtualProeprty>();
-            }, x => Assert.AreEqual("Cannot make non-virtual property bindable: Property.", x.Message));
-        }
-
         public class POCOViewModel_InvalidMetadata_BindableAttributeOnProeprtyWithoutSetter {
             [BindableProperty]
             public virtual string Property { get { return null; } }
