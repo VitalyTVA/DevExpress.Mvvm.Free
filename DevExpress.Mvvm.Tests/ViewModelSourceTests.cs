@@ -50,40 +50,6 @@ namespace DevExpress.Mvvm.Tests {
         #region errors
 #pragma warning disable 0618
         #region properties
-        public class POCOViewModel_TwoPropertyChangedMethods {
-            public virtual string Property { get; set; }
-            protected void OnPropertyChanged() { }
-            protected void OnPropertyChanged(string oldValue) { }
-        }
-        [Test]
-        public void POCOViewModel_TwoPropertyChangedMethodsTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_TwoPropertyChangedMethods>();
-            }, x => Assert.AreEqual("More than one property changed method: Property.", x.Message));
-        }
-
-        public class POCOViewModel_PrivateChangedMethod {
-            public virtual string Property { get; set; }
-            void OnPropertyChanged() { }
-        }
-        [Test]
-        public void POCOViewModel_PrivateChangedMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_PrivateChangedMethod>();
-            }, x => Assert.AreEqual("Property changed method should be public or protected: OnPropertyChanged.", x.Message));
-        }
-
-        public class POCOViewModel_InternalChangedMethod {
-            public virtual string Property { get; set; }
-            internal void OnPropertyChanged() { }
-        }
-        [Test]
-        public void POCOViewModel_InternalChangedMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_InternalChangedMethod>();
-            }, x => Assert.AreEqual("Property changed method should be public or protected: OnPropertyChanged.", x.Message));
-        }
-
         public class POCOViewModel_TwoParametersInChangedMethod {
             public virtual string Property { get; set; }
             protected void OnPropertyChanged(string a, string b) { }
