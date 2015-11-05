@@ -50,16 +50,7 @@ namespace DevExpress.Mvvm.Tests {
         #region errors
 #pragma warning disable 0618
         #region properties
-        public class POCOViewModel_FunctionAsChangedMethod {
-            public virtual string Property { get; set; }
-            protected int OnPropertyChanged() { return 0; }
-        }
-        [Test]
-        public void POCOViewModel_FunctionAsChangedMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_FunctionAsChangedMethod>();
-            }, x => Assert.AreEqual("Property changed method cannot have return type: OnPropertyChanged.", x.Message));
-        }
+
 
         public class POCOViewModel_InvalidChangedMethodParameterType {
             [BindableProperty(OnPropertyChangedMethodName = "MyOnPropertyChanged")]
