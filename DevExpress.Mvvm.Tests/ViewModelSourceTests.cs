@@ -50,17 +50,6 @@ namespace DevExpress.Mvvm.Tests {
         #region errors
 #pragma warning disable 0618
         #region properties
-        public class POCOViewModel_TwoParametersInChangedMethod {
-            public virtual string Property { get; set; }
-            protected void OnPropertyChanged(string a, string b) { }
-        }
-        [Test]
-        public void POCOViewModel_TwoParametersInChangedMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_TwoParametersInChangedMethod>();
-            }, x => Assert.AreEqual("Property changed method cannot have more than one parameter: OnPropertyChanged.", x.Message));
-        }
-
         public class POCOViewModel_FunctionAsChangedMethod {
             public virtual string Property { get; set; }
             protected int OnPropertyChanged() { return 0; }
