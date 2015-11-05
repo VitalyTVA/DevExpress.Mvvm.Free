@@ -50,18 +50,6 @@ namespace DevExpress.Mvvm.Tests {
         #region errors
 #pragma warning disable 0618
         #region properties
-        public class POCOViewModel_SealedClassBase {
-            public virtual string Property { get; set; }
-        }
-        public sealed class POCOViewModel_SealedClass : POCOViewModel_SealedClassBase {
-        }
-        [Test]
-        public void POCOViewModel_SealedClassTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_SealedClass>();
-            }, x => Assert.AreEqual("Cannot create dynamic class for the sealed class: POCOViewModel_SealedClass.", x.Message));
-        }
-
         public class POCOViewModel_TwoPropertyChangedMethods {
             public virtual string Property { get; set; }
             protected void OnPropertyChanged() { }
