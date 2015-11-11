@@ -51,19 +51,6 @@ namespace DevExpress.Mvvm.Tests {
 #pragma warning disable 0618
         #region properties
 
-
-        public class POCOViewModel_InvalidChangedMethodParameterType {
-            [BindableProperty(OnPropertyChangedMethodName = "MyOnPropertyChanged")]
-            public virtual int Property { get; set; }
-            protected void MyOnPropertyChanged(double oldValue) { }
-        }
-        [Test]
-        public void POCOViewModel_InvalidChangedMethodParameterTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_InvalidChangedMethodParameterType>();
-            }, x => Assert.AreEqual("Property changed method argument type should match property type: MyOnPropertyChanged.", x.Message));
-        }
-
         public class POCOViewModel_InvalidChangedMethodName {
             [BindableProperty(OnPropertyChangedMethodName = "MyOnPropertyChanged")]
             public virtual int Property { get; set; }
@@ -74,22 +61,6 @@ namespace DevExpress.Mvvm.Tests {
             AssertHelper.AssertThrows<ViewModelSourceException>(() => {
                 ViewModelSource.Create<POCOViewModel_InvalidChangedMethodName>();
             }, x => Assert.AreEqual("Property changed method not found: MyOnPropertyChanged.", x.Message));
-        }
-        [MetadataType(typeof(POCOViewModel_InvalidFluentAPIChangedMethodMetadata))]
-        public class POCOViewModel_InvalidFluentAPIChangedMethod {
-            public class POCOViewModel_InvalidFluentAPIChangedMethodMetadata : IMetadataProvider<POCOViewModel_InvalidFluentAPIChangedMethod> {
-                void IMetadataProvider<POCOViewModel_InvalidFluentAPIChangedMethod>.BuildMetadata(MetadataBuilder<POCOViewModel_InvalidFluentAPIChangedMethod> builder) {
-                    builder.Property(x => x.Property).OnPropertyChangedCall(x => x.MyOnPropertyChanged());
-                }
-            }
-            public virtual int Property { get; set; }
-            void MyOnPropertyChanged() { }
-        }
-        [Test]
-        public void POCOViewModel_InvalidFluentAPIChangedMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_InvalidFluentAPIChangedMethod>();
-            }, x => Assert.AreEqual("Property changed method should be public or protected: MyOnPropertyChanged.", x.Message));
         }
 
         public class InvalidIPOCOViewModelImplementation : IPOCOViewModel {
