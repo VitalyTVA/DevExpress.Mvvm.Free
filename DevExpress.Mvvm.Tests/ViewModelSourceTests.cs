@@ -49,21 +49,6 @@ namespace DevExpress.Mvvm.Tests {
     public class ViewModelSourceTests : BaseWpfFixture {
         #region errors
 #pragma warning disable 0618
-        #region properties
-
-        public class POCOViewModel_InvalidChangedMethodName {
-            [BindableProperty(OnPropertyChangedMethodName = "MyOnPropertyChanged")]
-            public virtual int Property { get; set; }
-            protected void OnPropertyChanged(double oldValue) { }
-        }
-        [Test]
-        public void POCOViewModel_InvalidChangedMethodNameTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_InvalidChangedMethodName>();
-            }, x => Assert.AreEqual("Property changed method not found: MyOnPropertyChanged.", x.Message));
-        }
-        #endregion
-
         #region commands
         public class POCOViewModel_MemberWithCommandName {
             public void Show() { ShowCommand++; }
