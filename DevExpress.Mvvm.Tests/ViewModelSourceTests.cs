@@ -82,20 +82,6 @@ namespace DevExpress.Mvvm.Tests {
             }, x => Assert.AreEqual("Object doesn't implement IPOCOViewModel.", x.Message));
         }
 
-        public class POCOViewModel_INPCImplementor_NoPopertyChanged : INotifyPropertyChanged {
-            public POCOViewModel_INPCImplementor_NoPopertyChanged() {
-                PropertyChanged(null, null);
-            }
-            public virtual string Property1 { get; set; }
-            public event PropertyChangedEventHandler PropertyChanged;
-        }
-        [Test]
-        public void INPCImplementor_NoPopertyChangedTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_INPCImplementor_NoPopertyChanged>();
-            }, x => Assert.AreEqual("Class already supports INotifyPropertyChanged, but RaisePropertyChanged(string) method not found: POCOViewModel_INPCImplementor_NoPopertyChanged.", x.Message));
-        }
-
         public class POCOViewModel_INPCImplementor_PrivatePopertyChanged : INotifyPropertyChanged {
             public POCOViewModel_INPCImplementor_PrivatePopertyChanged() {
                 PropertyChanged(null, null);
