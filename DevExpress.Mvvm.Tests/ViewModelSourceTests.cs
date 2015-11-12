@@ -74,13 +74,6 @@ namespace DevExpress.Mvvm.Tests {
                 ViewModelSource.Create<InvalidIPOCOViewModelImplementation>();
             }, x => Assert.AreEqual("Type cannot implement IPOCOViewModel: InvalidIPOCOViewModelImplementation.", x.Message));
         }
-
-        [Test]
-        public void CallRaiseProeprtyChangedMethodExtensionMethodForNotPOCOViewModelTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                new POCOViewModel().RaisePropertyChanged(x => x.Property1);
-            }, x => Assert.AreEqual("Object doesn't implement IPOCOViewModel.", x.Message));
-        }
         #endregion
 
         #region commands
