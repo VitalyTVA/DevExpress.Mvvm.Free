@@ -81,20 +81,6 @@ namespace DevExpress.Mvvm.Tests {
                 new POCOViewModel().RaisePropertyChanged(x => x.Property1);
             }, x => Assert.AreEqual("Object doesn't implement IPOCOViewModel.", x.Message));
         }
-
-        public class POCOViewModel_FinalPropertyBase {
-            public virtual int Property { get; set; }
-        }
-        public class POCOViewModel_FinalProperty : POCOViewModel_FinalPropertyBase {
-            [BindableProperty]
-            public sealed override int Property { get; set; }
-        }
-        [Test]
-        public void POCOViewModel_FinalPropertyTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_FinalProperty>();
-            }, x => Assert.AreEqual("Cannot override final property: Property.", x.Message));
-        }
         #endregion
 
         #region commands
