@@ -62,18 +62,6 @@ namespace DevExpress.Mvvm.Tests {
                 ViewModelSource.Create<POCOViewModel_InvalidChangedMethodName>();
             }, x => Assert.AreEqual("Property changed method not found: MyOnPropertyChanged.", x.Message));
         }
-
-        public class InvalidIPOCOViewModelImplementation : IPOCOViewModel {
-            void IPOCOViewModel.RaisePropertyChanged(string propertyName) {
-                throw new NotImplementedException();
-            }
-        }
-        [Test]
-        public void InvalidIPOCOViewModelImplementationTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<InvalidIPOCOViewModelImplementation>();
-            }, x => Assert.AreEqual("Type cannot implement IPOCOViewModel: InvalidIPOCOViewModelImplementation.", x.Message));
-        }
         #endregion
 
         #region commands
