@@ -82,36 +82,6 @@ namespace DevExpress.Mvvm.Tests {
             }, x => Assert.AreEqual("Object doesn't implement IPOCOViewModel.", x.Message));
         }
 
-        public class POCOViewModel_INPCImplementor_ByRefPopertyChanged : INotifyPropertyChanged {
-            public POCOViewModel_INPCImplementor_ByRefPopertyChanged() {
-                PropertyChanged(null, null);
-            }
-            public virtual string Property1 { get; set; }
-            public event PropertyChangedEventHandler PropertyChanged;
-            void RaisePropertyChanged(ref string x) { }
-        }
-        [Test]
-        public void INPCImplementor_ByRefPopertyChangedTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_INPCImplementor_ByRefPopertyChanged>();
-            }, x => Assert.AreEqual("Class already supports INotifyPropertyChanged, but RaisePropertyChanged(string) method not found: POCOViewModel_INPCImplementor_ByRefPopertyChanged.", x.Message));
-        }
-
-        public class POCOViewModel_INPCImplementor_OutPopertyChanged : INotifyPropertyChanged {
-            public POCOViewModel_INPCImplementor_OutPopertyChanged() {
-                PropertyChanged(null, null);
-            }
-            public virtual string Property1 { get; set; }
-            public event PropertyChangedEventHandler PropertyChanged;
-            void RaisePropertyChanged(ref string x) { }
-        }
-        [Test]
-        public void INPCImplementor_OutPopertyChangedTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_INPCImplementor_OutPopertyChanged>();
-            }, x => Assert.AreEqual("Class already supports INotifyPropertyChanged, but RaisePropertyChanged(string) method not found: POCOViewModel_INPCImplementor_OutPopertyChanged.", x.Message));
-        }
-
         public class POCOViewModel_INPCImplementor_NoArgPopertyChanged : INotifyPropertyChanged {
             public POCOViewModel_INPCImplementor_NoArgPopertyChanged() {
                 PropertyChanged(null, null);
