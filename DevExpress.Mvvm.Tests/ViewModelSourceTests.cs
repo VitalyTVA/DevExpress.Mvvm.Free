@@ -50,27 +50,6 @@ namespace DevExpress.Mvvm.Tests {
         #region errors
 #pragma warning disable 0618
         #region commands
-        public class POCOViewModel_MemberWithCommandName {
-            public void Show() { ShowCommand++; }
-            int ShowCommand = 0;
-        }
-        [Test]
-        public void POCOViewModel_MemberWithCommandNameTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_MemberWithCommandName>();
-            }, x => Assert.AreEqual("Member with the same command name already exists: ShowCommand.", x.Message));
-        }
-        public class POCOViewModel_MemberWithCommandName2 {
-            public void Show() { ShowCommand(null, null); }
-            public static event EventHandler ShowCommand;
-        }
-        [Test]
-        public void POCOViewModel_MemberWithCommandNameTest2() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<POCOViewModel_MemberWithCommandName2>();
-            }, x => Assert.AreEqual("Member with the same command name already exists: ShowCommand.", x.Message));
-        }
-
         public class DuplicateNamesViewModel {
             [Command(Name = "MyCommand")]
             public void Method1() { }
