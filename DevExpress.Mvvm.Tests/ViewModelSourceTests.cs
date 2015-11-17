@@ -74,17 +74,6 @@ namespace DevExpress.Mvvm.Tests {
             }, x => Assert.AreEqual("Method should be public: NotPublicMethod.", x.Message));
         }
 
-        public class TooMuchArgumentsMethodViewModel {
-            [Command]
-            public void TooMuchArgumentsMethod(int a, int b) { }
-        }
-        [Test]
-        public void CommandAttribute_TooMuchArgumentsMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<TooMuchArgumentsMethodViewModel>();
-            }, x => Assert.AreEqual("Method cannot have more than one parameter: TooMuchArgumentsMethod.", x.Message));
-        }
-
         public class OutParameterMethodViewModel {
             [Command]
             public void OutParameterMethod(out int a) { a = 0; }
