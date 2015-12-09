@@ -50,51 +50,6 @@ namespace DevExpress.Mvvm.Tests {
         #region errors
 #pragma warning disable 0618
         #region commands
-        public class DuplicateNamesViewModel {
-            [Command(Name = "MyCommand")]
-            public void Method1() { }
-            [Command(Name = "MyCommand")]
-            public void Method2() { }
-        }
-        [Test]
-        public void CommandAttribute_DuplicateNamesTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<DuplicateNamesViewModel>();
-            }, x => Assert.AreEqual("Member with the same command name already exists: MyCommand.", x.Message));
-        }
-
-        public class NotPublicMethodViewModel {
-            [Command]
-            void NotPublicMethod() { }
-        }
-        [Test]
-        public void CommandAttribute_NotPublicMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<NotPublicMethodViewModel>();
-            }, x => Assert.AreEqual("Method should be public: NotPublicMethod.", x.Message));
-        }
-
-        public class OutParameterMethodViewModel {
-            [Command]
-            public void OutParameterMethod(out int a) { a = 0; }
-        }
-        [Test]
-        public void CommandAttribute_OutParameterMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<OutParameterMethodViewModel>();
-            }, x => Assert.AreEqual("Method cannot have out or reference parameter: OutParameterMethod.", x.Message));
-        }
-
-        public class RefParameterMethodViewModel {
-            [Command]
-            public void RefParameterMethod(ref int a) { a = 0; }
-        }
-        [Test]
-        public void CommandAttribute_RefParameterMethodTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<RefParameterMethodViewModel>();
-            }, x => Assert.AreEqual("Method cannot have out or reference parameter: RefParameterMethod.", x.Message));
-        }
 
         public class CanExecuteParameterCountMismatchViewModel {
             [Command]
