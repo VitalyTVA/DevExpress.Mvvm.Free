@@ -49,20 +49,6 @@ namespace DevExpress.Mvvm.Tests {
     public class ViewModelSourceTests : BaseWpfFixture {
         #region errors
 #pragma warning disable 0618
-        #region commands
-
-        public class InvalidCanExecuteMethodNameViewModel {
-            [Command(CanExecuteMethodName = "CanMethod_")]
-            public void Method() { }
-        }
-        [Test]
-        public void CommandAttribute_InvalidCanExecuteMethodNameTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<InvalidCanExecuteMethodNameViewModel>();
-            }, x => Assert.AreEqual("Method not found: CanMethod_.", x.Message));
-        }
-        #endregion
-
         #region ctors
         public class InternalCtor {
             public InternalCtor() { }
