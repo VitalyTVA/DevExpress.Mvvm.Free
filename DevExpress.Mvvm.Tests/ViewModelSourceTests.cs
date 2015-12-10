@@ -51,30 +51,6 @@ namespace DevExpress.Mvvm.Tests {
 #pragma warning disable 0618
         #region commands
 
-        public class CanExecuteParameterCountMismatchViewModel {
-            [Command]
-            public void Method() { }
-            public bool CanMethod(int a) { return true; }
-        }
-        [Test]
-        public void CommandAttribute_CanExecuteParameterCountMismatchTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<CanExecuteParameterCountMismatchViewModel>();
-            }, x => Assert.AreEqual("Can execute method has incorrect parameters: CanMethod.", x.Message));
-        }
-
-        public class CanExecuteParametersMismatchViewModel {
-            [Command]
-            public void Method(long a) { }
-            public bool CanMethod(int a) { return true; }
-        }
-        [Test]
-        public void CommandAttribute_CanExecuteParametersMismatchTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<CanExecuteParametersMismatchViewModel>();
-            }, x => Assert.AreEqual("Can execute method has incorrect parameters: CanMethod.", x.Message));
-        }
-
         public class CanExecuteParametersMismatchViewModel2 {
             [Command]
             public void Method(int a) { }
@@ -172,7 +148,7 @@ namespace DevExpress.Mvvm.Tests {
         }
 
         [Test]
-        public void CreateViaGenericParameters_InvalidParaneterTypes() {
+        public void CreateViaGenericParameters_InvalidParameterTypes() {
             AssertHelper.AssertThrows<ViewModelSourceException>(() => {
                 var viewModel = ViewModelSource<POCOViewModel_CreateViaGenericParameters>.Create(1);
             }, x => Assert.AreEqual("Constructor not found.", x.Message));
