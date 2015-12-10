@@ -51,30 +51,6 @@ namespace DevExpress.Mvvm.Tests {
 #pragma warning disable 0618
         #region commands
 
-        public class CanExecuteParametersMismatchViewModel2 {
-            [Command]
-            public void Method(int a) { }
-            public bool CanMethod(out int a) { a = 0; return true; }
-        }
-        [Test]
-        public void CommandAttribute_CanExecuteParametersMismatchTest2() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<CanExecuteParametersMismatchViewModel2>();
-            }, x => Assert.AreEqual("Can execute method has incorrect parameters: CanMethod.", x.Message));
-        }
-
-        public class NotPublicCanExecuteViewModel {
-            [Command]
-            public void Method() { }
-            bool CanMethod() { return true; }
-        }
-        [Test]
-        public void CommandAttribute_NotPublicCanExecuteTest() {
-            AssertHelper.AssertThrows<ViewModelSourceException>(() => {
-                ViewModelSource.Create<NotPublicCanExecuteViewModel>();
-            }, x => Assert.AreEqual("Method should be public: CanMethod.", x.Message));
-        }
-
         public class InvalidCanExecuteMethodNameViewModel {
             [Command(CanExecuteMethodName = "CanMethod_")]
             public void Method() { }
